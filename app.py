@@ -51,7 +51,7 @@ def autocomplete():
     # Get all possible schools for this zipcode
     possible_schools = get_schools_for_zipcode(zipcode)
     # Now, do a fuzzy-match to find which school this user is inputting within the possible schools; filter out schools with low relevance
-    fuzzy_scores = filter(lambda matches: matches[1] >= THRESHHOLD, process.extract(str_so_far, list(possible_schools["School"])))
+    fuzzy_scores = filter(lambda matches: matches[1] >= THRESHHOLD, process.extract(str_so_far, list(possible_schools["school_name"])))
     # Create a table of schools and scores
     school_names, scores = zip(*fuzzy_scores)
     rating_tbl = pd.DataFrame({"school_name": school_names, "FW_Score": scores})
