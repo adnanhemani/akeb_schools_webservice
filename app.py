@@ -54,9 +54,9 @@ def autocomplete():
     fuzzy_scores = filter(lambda matches: matches[1] >= THRESHHOLD, process.extract(str_so_far, list(possible_schools["School"])))
     # Create a table of schools and scores
     school_names, scores = zip(*fuzzy_scores)
-    rating_tbl = pd.DataFrame({"School": school_names, "FW_Score": scores})
+    rating_tbl = pd.DataFrame({"school_name": school_names, "FW_Score": scores})
     # Merge them onto the all possible schools, return in order of fuzzy-matched schools by how relevant they are
-    return pd.merge(rating_tbl, possible_schools, on="School", how="left").to_json(orient="records")
+    return pd.merge(rating_tbl, possible_schools, on="school_name", how="left").to_json(orient="records")
 
 
 # LRU Caching Zipcodes - Get saved dataframe from disk, cache result to minimize IO, and return dataframe
