@@ -79,9 +79,9 @@ if (not REGENERATE_ALL_SCHOOLS_ON_STARTUP):
                 run_only_these_zip_codes.add(z)
         all_zip_codes = run_only_these_zip_codes
     else:
-        regenerate_all_schools_on_startup(results_subdirectory)
+        regenerate_all_schools_on_startup()
 else:
-    regenerate_all_schools_on_startup(results_subdirectory)
+    regenerate_all_schools_on_startup()
 
 logger = multiprocessing.log_to_stderr()
 logger.setLevel(logging.DEBUG)

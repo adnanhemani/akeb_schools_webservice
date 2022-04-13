@@ -67,5 +67,5 @@ def get_schools_for_zipcode(zipcode):
     except FileNotFoundError as e:
         print(e)
         raise e
-    return all_schools[["ncessch", "School", "url", "overall_rating", "Zipcode"]]
+    return all_schools[["nces_id", "school_name", "url", "gs_overall_rating"]]
 
