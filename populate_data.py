@@ -42,6 +42,14 @@ def add_leading_zeros(z):
             z = "0" + z
         return z
 
+def append_zeros(s):
+    try:
+        while len(s) < 12:
+            s = '0' + s
+        return s
+    except:
+        return s
+
 def regenerate_all_schools_on_startup():
     if os.path.exists(RESULTS_SUBDIRECTORY) and os.path.isdir(RESULTS_SUBDIRECTORY):
         shutil.rmtree(RESULTS_SUBDIRECTORY)
@@ -50,8 +58,14 @@ def regenerate_all_schools_on_startup():
 def get_zipcode_school_file(zipcode):
     return RESULTS_SUBDIRECTORY + add_leading_zeros(zipcode) + ".csv"
 
-# Read in school database and attach lat-lon coordinate to each school
-schools_db = pd.read_csv("gs_2021_and_niche_2017_ratings.csv")
+# Create school database and attach lat-lon coordinate to each school
+ratings = pd.read_csv("gs_2021_and_niche_2017_ratings.csv", dtype={"nces_id": str})
+iims = pd.read_csv("SchoolData_April142022.csv", dtype={"SEEDID": str})
+iims["SEEDID"] = iims["SEEDID"].apply(lambda x: append_zeros(x))
+ratings["nces_id"] = ratings["nces_id"].apply(lambda x: append_zeros(x))
+only_active = iims[iims["IsActive"] == 1]
+schools_db = pd.merge(ratings, only_active, how='left', left_on="nces_id", right_on="SEEDID")
+
 zip_codes = pd.read_csv("US.txt", delimiter = "\t")
 
 def _calc_all_distances(zipcode): 
