@@ -76,7 +76,7 @@ def _calc_all_distances(zipcode):
         # Filter for only schools within the tolerance and save those to disk
         schools_db[schools_dist <= MILES_TOLERANCE].to_csv(get_zipcode_school_file(zipcode))
         return
-    except Error as e:
+    except Exception as e:
         print(f"zipcode ${zipcode} cannot be processed! ", e)
         return
 
