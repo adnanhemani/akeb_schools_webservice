@@ -68,13 +68,17 @@ schools_db = pd.merge(ratings, only_active, how='left', left_on="nces_id", right
 
 zip_codes = pd.read_csv("US.txt", delimiter = "\t")
 
-def _calc_all_distances(zipcode): 
-    z_record = zip_codes[zip_codes["Zipcode"] == zipcode]
-    # Calculate distance between school and currently processing zipcode
-    schools_dist = schools_db.apply(lambda row: calc_dist_in_mi(row['lat'], row['long'], z_record.Latitude.item(), z_record.Longitude.item()), axis=1)
-    # Filter for only schools within the tolerance and save those to disk
-    schools_db[schools_dist <= MILES_TOLERANCE].to_csv(get_zipcode_school_file(zipcode))
-    return
+def _calc_all_distances(zipcode):
+    try:
+        z_record = zip_codes[zip_codes["Zipcode"] == zipcode]
+        # Calculate distance between school and currently processing zipcode
+        schools_dist = schools_db.apply(lambda row: calc_dist_in_mi(row['lat'], row['long'], z_record.Latitude.item(), z_record.Longitude.item()), axis=1)
+        # Filter for only schools within the tolerance and save those to disk
+        schools_db[schools_dist <= MILES_TOLERANCE].to_csv(get_zipcode_school_file(zipcode))
+        return
+    except Error as e:
+        print(f"zipcode ${zipcode} cannot be processed! ", e)
+        return
 
 # This code will run on cluster start
 # Read in file with all zipcodes and their lat-lon coordinates
